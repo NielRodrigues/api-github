@@ -1,26 +1,28 @@
-import React from "react";
-import logo from "../../assets/images/logo.png";
-import "./style.css";
+import React, {useState} from "react";
+import { MdSearch } from 'react-icons/md';
+import logo from "../../assets/images/github-logo.svg";
+import { Container, Logo, Title, Form, Input, Button} from "./style";
+
 
 function Main(){
+
+  const [login, setLogin] = useState("")
+
   return (
-    <section className="App">
-      <div className="Container">
-        <img src={logo} className="logo" alt="logo" />
-        <h1 className="text-headline">
-          Olá Mundo, esse é o Template da RocketStack<span>.</span>
-        </h1>
-        <p className="text-paragraf">FEITO POR CARLOS RODRIGUES</p>
-        <a
-          href="https://carlosdanieldev.netlify.app/"
-          target="_blank"
-          className="portfolio-link"
-          rel="noreferrer"
-        >
-          &copy; PORTIFÓLIO
-        </a>
-      </div>
-    </section>
+    <Container className="Container">
+      <Logo src={logo} alt="Logo GitHub" />
+      <Title>API GitHub</Title>
+      <Form>
+        <Input
+          placeholder="Usuário"
+          value={login}
+          onChange={(event) => setLogin(event.target.value)}
+        />
+        <Button to={`/${login}/repositories`}>
+          <MdSearch size={40} />
+        </Button>
+      </Form>
+    </Container>
   );
 };
 
