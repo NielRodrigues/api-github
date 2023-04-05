@@ -29,6 +29,7 @@ export const Selector = styled.button`
   transform: .3s;
   cursor: pointer;
 
+
   & span{
     font-weight: 600;
   }

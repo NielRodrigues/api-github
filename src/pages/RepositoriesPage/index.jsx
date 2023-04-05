@@ -1,63 +1,55 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
+import { useParams } from 'react-router-dom'
+import logo from '../../assets/images/logo.png'
 import Profile from "./Profile";
 import Filter from "./Filter";
 import Repositories from "./Repositories";
-import { Container, Sidebar, Main } from "./style";
-import { getLangFrom } from "../../services/api";
+import { Loading, Logo, LoadingTitle, Container, Sidebar, Main } from "./style";
+import { getUser, getRepos, getLangFrom } from "../../services/api";
 
 function RepositoriesPage(){
 
+  const {login} = useParams();
+
+  const [user, setUser] = useState()
+  const [repositories, setRepositories] = useState()
+  const [languages, setLanguages] = useState()
   const [currentLanguage, setCurrentLanguage] = useState()
+  const [loading, setLoading] = useState(true)
 
-  const user = {
-    login: "NielRodrigues",
-    avatar_url: "https://avatars.githubusercontent.com/u/101821262?v=4",
-    name: "Carlos Daniel Rodrigues",
-    location: "Brasil",
-    blog: "",
-    company: '',
-    followers: 0,
-    following: 0,
-  }
+  useEffect(() => {
+    const loadData = async () => {
+      // getUser();
+      const [userResponse, repositoriesResponse] = await Promise.all([
+        getUser(login),
+        getRepos(login)
+      ]);
+      setUser(userResponse.data)
+      setRepositories(repositoriesResponse.data)
 
-  const repositories = [
-    {
-      id: 1,
-      name: "Repo 1",
-      description: "",
-      html_url: "https://github.com/NielRodrigues/API-Git-Hub",
-      language: "JavaScript",
-    },
-    {
-      id: 2,
-      name: "Repo 2",
-      description: "",
-      html_url: "https://github.com/NielRodrigues/API-Git-Hub",
-      language: "TypeScript",
-    },
-    {
-      id: 3,
-      name: "Repo 3",
-      description: "",
-      html_url: "https://github.com/NielRodrigues/API-Git-Hub",
-      language: "Pyhton",
-    },
-    {
-      id: 4,
-      name: "Repo 4",
-      description: "",
-      html_url: "https://github.com/NielRodrigues/API-Git-Hub",
-      language: "C#",
-    },
+      setLanguages(getLangFrom(repositoriesResponse.data))
 
-  ]
+      setLoading(false)
+    }
+    loadData();
+  }, [])
 
 
-  const languages = getLangFrom(repositories)
+
 
 
   const onFilterClick = (language) => {
       setCurrentLanguage(language)
+  }
+
+
+  if(loading){
+    return(
+      <Loading>
+        <Logo src={logo} alt='Logo' />
+        <LoadingTitle>Carregando...</LoadingTitle>
+      </Loading>
+    );
   }
 
   return (
