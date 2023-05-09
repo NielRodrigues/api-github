@@ -19,7 +19,6 @@ function RepositoriesPage(){
 
   useEffect(() => {
     const loadData = async () => {
-      // getUser();
       const [userResponse, repositoriesResponse] = await Promise.all([
         getUser(login),
         getRepos(login)
